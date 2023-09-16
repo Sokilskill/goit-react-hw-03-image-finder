@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import SearchBar from './SearchBar/SearchBar';
+import ImageGallery from './ImageGallery/ImageGallery';
 import Button from './Button/Button';
 
 const API_KEY = '38642451-6ca93df2512694306dc1a1cd7';
@@ -19,6 +20,7 @@ export class App extends Component {
     return (
       <>
         <SearchBar onSubmit={this.handlerFormSubmit} />
+        <ImageGallery />
         <Button />
       </>
     );
