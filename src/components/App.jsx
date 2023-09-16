@@ -1,16 +1,14 @@
-export const App = () => {
-  return (
-    <div
-      style={{
-        height: '100vh',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        fontSize: 40,
-        color: '#010101'
-      }}
-    >
-      React homework template
-    </div>
-  );
-};
+import { Component } from 'react';
+import SearchBar from './SearchBar/SearchBar';
+
+const API_KEY = '38642451-6ca93df2512694306dc1a1cd7';
+
+const BASE_URL = 'https://pixabay.com/api/';
+
+export class App extends Component {
+  state = {};
+
+  render() {
+    return <SearchBar />;
+  }
+}
