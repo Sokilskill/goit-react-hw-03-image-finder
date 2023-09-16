@@ -15,7 +15,6 @@ export default class SearchBar extends Component {
 
   handlerInputChange = e => {
     this.setState({ searchQuery: e.currentTarget.value });
-    console.log('e', e.currentTarget.value);
   };
 
   render() {
@@ -41,4 +40,6 @@ export default class SearchBar extends Component {
   }
 }
 
-SearchBar.propTypes = {};
+SearchBar.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+};
