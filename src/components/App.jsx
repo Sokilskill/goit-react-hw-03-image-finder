@@ -8,7 +8,11 @@ const BASE_URL = 'https://pixabay.com/api/';
 export class App extends Component {
   state = {};
 
+  handlerFormSubmit = searchQuery => {
+    console.log('first', searchQuery);
+  };
+
   render() {
-    return <SearchBar />;
+    return <SearchBar onSubmit={this.handlerFormSubmit} />;
   }
 }
