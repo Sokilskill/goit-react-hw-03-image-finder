@@ -18,11 +18,12 @@ export class App extends Component {
   };
 
   render() {
+    const { searchQuery } = this.state;
     return (
       <>
         <SearchBar onSubmit={this.handlerFormSubmit} />
         <Loader />
-        <ImageGallery />
+        <ImageGallery searchQuery={searchQuery} />
         <Button />
         <ToastContainer />
       </>

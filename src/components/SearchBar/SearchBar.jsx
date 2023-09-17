@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
-
+import { ImSearch } from 'react-icons/im';
 import css from './SearchBar.module.css';
 
 export default class SearchBar extends Component {
@@ -12,7 +12,7 @@ export default class SearchBar extends Component {
   handlerFormSubmit = e => {
     e.preventDefault();
     if (this.state.searchQuery.trim() === '') {
-      toast('Введіть щось для пошуку');
+      toast.error('Введіть щось для пошуку');
       return;
     }
     this.props.onSubmit(this.state.searchQuery);
@@ -29,8 +29,12 @@ export default class SearchBar extends Component {
     return (
       <header className={css.searchbar}>
         <form className={css.searchForm} onSubmit={this.handlerFormSubmit}>
-          <button type="submit" className={css['searchForm-button']}>
-            <span className={css['searchForm-button-label']}>Search</span>
+          <button
+            type="submit"
+            className={css['searchForm-button']}
+            aria-label=" Search"
+          >
+            <ImSearch className={css['searchForm-button-icon']}></ImSearch>
           </button>
 
           <input
