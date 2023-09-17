@@ -10,6 +10,8 @@ function Button({ fetchLoadMore }) {
   );
 }
 
-Button.propTypes = {};
+Button.propTypes = {
+  fetchLoadMore: PropTypes.func.isRequired,
+};
 
 export default Button;

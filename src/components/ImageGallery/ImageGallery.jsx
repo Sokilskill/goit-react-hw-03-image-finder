@@ -17,16 +17,19 @@ export class ImageGallery extends Component {
     dataQuery: null,
     status: 'idle',
     score: perPage,
+    showBtnMore: false,
   };
 
   async componentDidUpdate(prevProps, prevState) {
     if (this.props.searchQuery !== prevProps.searchQuery) {
       newsApiService.query = this.props.searchQuery;
       newsApiService.resetPageToDefault();
-      this.setState({ status: 'pending' });
+      this.setState({ status: 'pending', score: perPage });
 
       try {
         const data = await newsApiService.fetchSearch();
+        console.log('data.hitsBEFORE', data.hits);
+
         if (parseInt(data.totalHits) <= 0) {
           throw new Error(
             'Sorry, there are no images matching your search query. Please try again.'
@@ -39,7 +42,10 @@ export class ImageGallery extends Component {
         });
 
         toast(`Hooray! We found ${data.totalHits} images.`);
-        // if (data.totalHits > perPage) showEl(btnLoadMoreEl);
+        if (data.totalHits > perPage)
+          this.setState({
+            showBtnMore: true,
+          });
       } catch (error) {
         toast.error(`${error}`);
         console.log(error);
@@ -53,17 +59,23 @@ export class ImageGallery extends Component {
   async fetchLoadMore() {
     newsApiService.incrementPage();
     const data = await newsApiService.fetchSearch();
+    const { score } = this.state;
+    console.log('data.hits', data.hits);
     try {
-      // createRenderMarkup(data.hits);
-      // this.setState(prevState => {
-      //   score = prevState.score + data.hits.length;
-      // });
-      console.log('score', this.state.score);
+      this.setState(prevState => ({
+        dataQuery: [...prevState.dataQuery, ...data.hits],
+        score: prevState.score + data.hits.length,
+      }));
+      console.log('this.state.dataQuery', this.state.dataQuery);
+      console.log('this.state.score', this.state.score);
       // smoothPageScrolling();
-      // if (score >= data.totalHits) {
-      //   toast("We're sorry, but you've reached the end of search results.");
-      //   return;
-      // }
+      if (score >= data.totalHits) {
+        this.setState({
+          showBtnMore: false,
+        });
+        toast("We're sorry, but you've reached the end of search results.");
+        return;
+      }
     } catch (error) {
       toast.error(`${error}`);
       console.log(error);
@@ -71,7 +83,8 @@ export class ImageGallery extends Component {
   }
 
   render() {
-    const { dataQuery, status } = this.state;
+    const { dataQuery, status, showBtnMore } = this.state;
+
     if (status === 'pending') {
       return <Loader />;
     }
@@ -83,7 +96,7 @@ export class ImageGallery extends Component {
               <ImageGalleryItem key={data.id} imagePreview={data} />
             ))}
           </ul>
-          <Button fetchLoadMore={this.fetchLoadMore} />
+          {showBtnMore && <Button fetchLoadMore={() => this.fetchLoadMore()} />}
         </>
       );
     }
