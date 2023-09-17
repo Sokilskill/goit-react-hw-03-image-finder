@@ -87,21 +87,19 @@ export class ImageGallery extends Component {
   render() {
     const { dataQuery, status, showBtnMore } = this.state;
 
-    if (status === 'resolve') {
-      return (
-        <div className="container">
+    return (
+      <div className="container">
+        {status === 'resolve' && (
           <ul className={css.imageGallery}>
             {dataQuery.map(data => (
               <ImageGalleryItem key={data.id} imagePreview={data} />
             ))}
           </ul>
-          {showBtnMore && <Button fetchLoadMore={() => this.fetchLoadMore()} />}
-        </div>
-      );
-    }
-    if (status === 'pending') {
-      return <Loader />;
-    }
+        )}
+        {status === 'pending' && <Loader />}
+        {showBtnMore && <Button fetchLoadMore={() => this.fetchLoadMore()} />}
+      </div>
+    );
   }
 }
 

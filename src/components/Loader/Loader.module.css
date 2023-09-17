@@ -2,4 +2,5 @@
   display: flex;
   justify-content: center; /* Це центрує по горизонталі */
   align-items: center;
+  margin-bottom: 20px;
 }
