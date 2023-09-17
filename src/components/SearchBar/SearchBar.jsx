@@ -14,7 +14,7 @@ export default class SearchBar extends Component {
     const { searchQuery } = this.state;
 
     if (searchQuery.trim() === '') {
-      toast.error('Введіть щось для пошуку');
+      toast.error('Enter something to search.');
       return;
     }
     this.props.onSubmit(searchQuery.toLowerCase());

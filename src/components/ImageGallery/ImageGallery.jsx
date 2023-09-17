@@ -24,11 +24,10 @@ export class ImageGallery extends Component {
     if (this.props.searchQuery !== prevProps.searchQuery) {
       newsApiService.query = this.props.searchQuery;
       newsApiService.resetPageToDefault();
-      this.setState({ status: 'pending', score: perPage });
+      this.setState({ status: 'pending', score: perPage, showBtnMore: false });
 
       try {
         const data = await newsApiService.fetchSearch();
-        console.log('data.hitsBEFORE', data.hits);
 
         if (parseInt(data.totalHits) <= 0) {
           throw new Error(
@@ -59,23 +58,26 @@ export class ImageGallery extends Component {
   async fetchLoadMore() {
     newsApiService.incrementPage();
     const data = await newsApiService.fetchSearch();
-    const { score } = this.state;
-    console.log('data.hits', data.hits);
+    this.setState({
+      status: 'pending',
+    });
     try {
-      this.setState(prevState => ({
-        dataQuery: [...prevState.dataQuery, ...data.hits],
-        score: prevState.score + data.hits.length,
-      }));
-      console.log('this.state.dataQuery', this.state.dataQuery);
-      console.log('this.state.score', this.state.score);
-      // smoothPageScrolling();
-      if (score >= data.totalHits) {
-        this.setState({
-          showBtnMore: false,
-        });
-        toast("We're sorry, but you've reached the end of search results.");
-        return;
-      }
+      this.setState(prevState => {
+        const updatedScore = prevState.score + data.hits.length;
+        let showBtnMore = true;
+
+        if (updatedScore >= data.totalHits) {
+          showBtnMore = false;
+          toast("We're sorry, but you've reached the end of search results.");
+        }
+
+        return {
+          dataQuery: [...prevState.dataQuery, ...data.hits],
+          score: updatedScore,
+          showBtnMore,
+          status: 'resolve',
+        };
+      });
     } catch (error) {
       toast.error(`${error}`);
       console.log(error);
@@ -85,20 +87,20 @@ export class ImageGallery extends Component {
   render() {
     const { dataQuery, status, showBtnMore } = this.state;
 
-    if (status === 'pending') {
-      return <Loader />;
-    }
     if (status === 'resolve') {
       return (
-        <>
+        <div className="container">
           <ul className={css.imageGallery}>
             {dataQuery.map(data => (
               <ImageGalleryItem key={data.id} imagePreview={data} />
             ))}
           </ul>
           {showBtnMore && <Button fetchLoadMore={() => this.fetchLoadMore()} />}
-        </>
+        </div>
       );
+    }
+    if (status === 'pending') {
+      return <Loader />;
     }
   }
 }

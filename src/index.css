@@ -17,3 +17,9 @@ code {
 body.hidden-scroll {
   overflow: hidden;
 }
+
+.container {
+  max-width: 1365px;
+  padding: 20px;
+  margin: 0 auto;
+}

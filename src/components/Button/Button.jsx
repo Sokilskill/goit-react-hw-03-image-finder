@@ -4,7 +4,11 @@ import css from './Button.module.css';
 
 function Button({ fetchLoadMore }) {
   return (
-    <button className={css.button} onClick={fetchLoadMore}>
+    <button
+      className={css.button}
+      onClick={fetchLoadMore}
+      aria-label="button load more"
+    >
       Load More
     </button>
   );
