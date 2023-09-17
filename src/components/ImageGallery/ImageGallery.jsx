@@ -5,14 +5,16 @@ import { toast } from 'react-toastify';
 import Loader from '../Loader/Loader';
 import NewsApiService from 'api/pixabayAPI';
 import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem';
+import Button from '../Button/Button';
 import css from './ImageGallery.module.css';
 
 const newsApiService = new NewsApiService();
+const perPage = newsApiService.perPage;
+let score = perPage;
 
 export class ImageGallery extends Component {
   state = {
     dataQuery: null,
-    loading: false,
     status: 'idle',
   };
 
@@ -48,6 +50,29 @@ export class ImageGallery extends Component {
     }
   }
 
+  async fetchLoadMore() {
+    newsApiService.incrementPage();
+    const data = await newsApiService.fetchSearch();
+    try {
+      // createRenderMarkup(data.hits);
+      score += data.hits.length;
+      console.log('score', score);
+
+      // console.log(  'data.hits: ',
+      //   data.hits.length, 'page: ', newsApiService.page,
+      //   'total: ',  score
+      // );
+      // smoothPageScrolling();
+      if (score >= data.totalHits) {
+        // Notify.info("We're sorry, but you've reached the end of search results.");
+        return;
+      }
+    } catch (error) {
+      // Notify.failure(`${error}`);
+      console.log(error);
+    }
+  }
+
   render() {
     const { dataQuery, status } = this.state;
     if (status === 'pending') {
@@ -55,12 +80,14 @@ export class ImageGallery extends Component {
     }
     if (status === 'resolve') {
       return (
-        <ul className={css.imageGallery}>
-          {dataQuery &&
-            dataQuery.map(data => (
+        <>
+          <ul className={css.imageGallery}>
+            {dataQuery.map(data => (
               <ImageGalleryItem key={data.id} imagePreview={data} />
             ))}
-        </ul>
+          </ul>
+          <Button fetchLoadMore={this.fetchLoadMore} />
+        </>
       );
     }
   }

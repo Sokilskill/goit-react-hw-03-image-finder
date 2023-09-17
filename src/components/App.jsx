@@ -2,7 +2,6 @@ import { Component } from 'react';
 import { ToastContainer } from 'react-toastify';
 import SearchBar from './SearchBar/SearchBar';
 import ImageGallery from './ImageGallery/ImageGallery';
-import Button from './Button/Button';
 
 import 'react-toastify/dist/ReactToastify.min.css';
 
@@ -22,7 +21,6 @@ export class App extends Component {
         <SearchBar onSubmit={this.handlerFormSubmit} />
 
         <ImageGallery searchQuery={searchQuery} />
-        <Button />
         <ToastContainer />
       </>
     );
