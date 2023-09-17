@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import css from './ImageGallery.module.css';
 import { toast } from 'react-toastify';
 
 import Loader from '../Loader/Loader';
-
 import NewsApiService from 'api/pixabayAPI';
+import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem';
+import css from './ImageGallery.module.css';
 
 const newsApiService = new NewsApiService();
 
@@ -13,13 +13,14 @@ export class ImageGallery extends Component {
   state = {
     dataQuery: null,
     loading: false,
+    status: 'idle',
   };
 
   async componentDidUpdate(prevProps, prevState) {
     if (this.props.searchQuery !== prevProps.searchQuery) {
       newsApiService.query = this.props.searchQuery;
       newsApiService.resetPageToDefault();
-      this.setState({ loading: true });
+      this.setState({ status: 'pending' });
 
       try {
         const data = await newsApiService.fetchSearch();
@@ -31,33 +32,37 @@ export class ImageGallery extends Component {
 
         this.setState({
           dataQuery: data.hits,
-          loading: false,
+          status: 'resolve',
         });
-        console.log('data', data.hits);
-        console.log('data.totalHits', data.totalHits);
+
         toast(`Hooray! We found ${data.totalHits} images.`);
         // if (data.totalHits > perPage) showEl(btnLoadMoreEl);
       } catch (error) {
         toast.error(`${error}`);
         console.log(error);
         this.setState({
-          dataQuery: null,
-          loading: false,
+          // dataQuery: null,
+          status: 'rejected',
         });
       }
     }
   }
 
   render() {
-    const { loading, dataQuery } = this.state;
-    return (
-      <>
-        {loading && <Loader />}
+    const { dataQuery, status } = this.state;
+    if (status === 'pending') {
+      return <Loader />;
+    }
+    if (status === 'resolve') {
+      return (
         <ul className={css.imageGallery}>
-          {dataQuery && <p>{dataQuery[0].tags}</p>}
+          {dataQuery &&
+            dataQuery.map(data => (
+              <ImageGalleryItem key={data.id} imagePreview={data} />
+            ))}
         </ul>
-      </>
-    );
+      );
+    }
   }
 }
 
