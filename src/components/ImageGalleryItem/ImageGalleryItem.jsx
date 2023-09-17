@@ -18,7 +18,6 @@ class ImageGalleryItem extends Component {
     } = this.props;
     return (
       <>
-        {' '}
         <li className={css.imageGalleryItem} onClick={this.onToggleModal}>
           <img
             src={webformatURL}

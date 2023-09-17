@@ -1,7 +1,6 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Dna } from 'react-loader-spinner';
-function Loader(props) {
+function Loader() {
   return (
     <div>
       <Dna
@@ -15,7 +14,5 @@ function Loader(props) {
     </div>
   );
 }
-
-Loader.propTypes = {};
 
 export default Loader;

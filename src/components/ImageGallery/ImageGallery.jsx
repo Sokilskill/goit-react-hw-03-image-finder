@@ -10,12 +10,13 @@ import css from './ImageGallery.module.css';
 
 const newsApiService = new NewsApiService();
 const perPage = newsApiService.perPage;
-let score = perPage;
+// let score = perPage;
 
 export class ImageGallery extends Component {
   state = {
     dataQuery: null,
     status: 'idle',
+    score: perPage,
   };
 
   async componentDidUpdate(prevProps, prevState) {
@@ -43,7 +44,6 @@ export class ImageGallery extends Component {
         toast.error(`${error}`);
         console.log(error);
         this.setState({
-          // dataQuery: null,
           status: 'rejected',
         });
       }
@@ -55,20 +55,17 @@ export class ImageGallery extends Component {
     const data = await newsApiService.fetchSearch();
     try {
       // createRenderMarkup(data.hits);
-      score += data.hits.length;
-      console.log('score', score);
-
-      // console.log(  'data.hits: ',
-      //   data.hits.length, 'page: ', newsApiService.page,
-      //   'total: ',  score
-      // );
+      // this.setState(prevState => {
+      //   score = prevState.score + data.hits.length;
+      // });
+      console.log('score', this.state.score);
       // smoothPageScrolling();
-      if (score >= data.totalHits) {
-        // Notify.info("We're sorry, but you've reached the end of search results.");
-        return;
-      }
+      // if (score >= data.totalHits) {
+      //   toast("We're sorry, but you've reached the end of search results.");
+      //   return;
+      // }
     } catch (error) {
-      // Notify.failure(`${error}`);
+      toast.error(`${error}`);
       console.log(error);
     }
   }
