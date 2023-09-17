@@ -29,10 +29,11 @@
 
 .searchForm-button {
   display: inline-block;
-  /* width: 48px; */
+
   height: 48px;
   border: 0;
   padding: 5px 15px;
+  /* width: 48px; */
   /* background-image: url('https://image.flaticon.com/icons/svg/149/149852.svg'); */
   /* завантажити іконку розмістити її в public/images */
   /* background-size: 40%;

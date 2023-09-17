@@ -11,11 +11,13 @@ export default class SearchBar extends Component {
 
   handlerFormSubmit = e => {
     e.preventDefault();
-    if (this.state.searchQuery.trim() === '') {
+    const { searchQuery } = this.state;
+
+    if (searchQuery.trim() === '') {
       toast.error('Введіть щось для пошуку');
       return;
     }
-    this.props.onSubmit(this.state.searchQuery);
+    this.props.onSubmit(searchQuery.toLowerCase());
     this.setState({ searchQuery: '' });
   };
 
