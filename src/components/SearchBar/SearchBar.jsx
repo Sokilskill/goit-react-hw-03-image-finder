@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { toast } from 'react-toastify';
+
 import css from './SearchBar.module.css';
 
 export default class SearchBar extends Component {
@@ -9,6 +11,10 @@ export default class SearchBar extends Component {
 
   handlerFormSubmit = e => {
     e.preventDefault();
+    if (this.state.searchQuery.trim() === '') {
+      toast('Введіть щось для пошуку');
+      return;
+    }
     this.props.onSubmit(this.state.searchQuery);
     this.setState({ searchQuery: '' });
   };
@@ -18,6 +24,8 @@ export default class SearchBar extends Component {
   };
 
   render() {
+    const { searchQuery } = this.state;
+
     return (
       <header className={css.searchbar}>
         <form className={css.searchForm} onSubmit={this.handlerFormSubmit}>
@@ -32,7 +40,7 @@ export default class SearchBar extends Component {
             autoComplete="off"
             autoFocus
             placeholder="Search images and photos"
-            value={this.state.searchQuery}
+            value={searchQuery}
           />
         </form>
       </header>

@@ -1,11 +1,12 @@
 import { Component } from 'react';
+import { ToastContainer } from 'react-toastify';
 import SearchBar from './SearchBar/SearchBar';
 import ImageGallery from './ImageGallery/ImageGallery';
 import Button from './Button/Button';
+import Loader from './Loader/Loader';
+import Modal from './Modal/Modal';
 
-const API_KEY = '38642451-6ca93df2512694306dc1a1cd7';
-
-const BASE_URL = 'https://pixabay.com/api/';
+import 'react-toastify/dist/ReactToastify.min.css';
 
 export class App extends Component {
   state = {
@@ -20,8 +21,10 @@ export class App extends Component {
     return (
       <>
         <SearchBar onSubmit={this.handlerFormSubmit} />
+        <Loader />
         <ImageGallery />
         <Button />
+        <ToastContainer />
       </>
     );
   }
